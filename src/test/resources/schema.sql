@@ -1,0 +1,8 @@
+DROP TABLE IF EXISTS item;
+
+CREATE TABLE item (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    item_name VARCHAR(10) NOT NULL,
+    price INTEGER NOT NULL,
+    quantity INTEGER NOT NULL
+);
