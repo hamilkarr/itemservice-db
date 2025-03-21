@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hello.itemservice.repository.mybatis.ItemMapper">
+
+    <sql id="itemColumns">
+        id, item_name, price, quantity
+    </sql>
+
+    <sql id="itemTable">
+        item
+    </sql>
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO <include refid="itemTable"/> (item_name, price, quantity)
+        VALUES (#{itemName}, #{price}, #{quantity})
+    </insert>
+
+    <update id="update">
+        UPDATE <include refid="itemTable"/>
+        SET item_name = #{updateParam.itemName},
+            price = #{updateParam.price},
+            quantity = #{updateParam.quantity}
+        WHERE id = #{id}
+    </update>
+
+    <select id="findById" resultType="Item">
+        SELECT <include refid="itemColumns"/>
+        FROM <include refid="itemTable"/>
+        WHERE id = #{id}
+    </select>
+
+    <select id="findAll" resultType="Item">
+        SELECT <include refid="itemColumns"/>
+        FROM <include refid="itemTable"/>
+        <where>
+            <if test="itemName != null and itemName != ''">
+                AND item_name LIKE concat('%', #{itemName}, '%')
+            </if>
+            <if test="maxPrice != null">
+                AND price &lt;= #{maxPrice}
+            </if>
+        </where>
+    </select>
+
+</mapper> 
